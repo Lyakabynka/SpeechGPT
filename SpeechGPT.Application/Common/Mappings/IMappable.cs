@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,6 @@ namespace SpeechGPT.Application.Common.Mappings
 {
     public interface IMappable<T>
     {
-        public void Mapping()
-        {
-            throw new NotImplementedException();
-        }
+        public void Mapping(Profile profile);
     }
 }

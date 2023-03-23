@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "kHtsJ9AF0DesWgOsdbT2BVeEn6fBvC4lZq+PmLQuIGZun0QXmZeCFaob2TvHxvg+MVuGAjoy1Si+5qtvlKOY9g==",
+  "dgSpecHash": "9ktWrGv6Y2AZ2FAz0z8EW9IY4I82ahj77LpPbA/Hjp9gjvzDam3tEWOOX8SsBG/CiK2or3Da0CL0Gs2LVXPvWg==",
   "success": true,
-  "projectFilePath": "D:\\Code\\Visual Studio Projects\\SpeechGPT.Backend\\SpeechGPT.Presentation\\SpeechGPT.Presentation.csproj",
+  "projectFilePath": "D:\\Code\\Visual Studio Projects\\SpeechGPT.Backend\\SpeechGPT.Presentation\\SpeechGPT.WebApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\dima1\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\dima1\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\dima1\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
+    "C:\\Users\\dima1\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\dima1\\.nuget\\packages\\mediatr\\12.0.1\\mediatr.12.0.1.nupkg.sha512",
     "C:\\Users\\dima1\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
     "C:\\Users\\dima1\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",

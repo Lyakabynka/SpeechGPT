@@ -9,7 +9,7 @@ namespace SpeechGPT.Persistence.EntityTypeConfigurations
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.HasKey(u => u.Id);
-            builder.HasIndex(u => u.Id);
+            builder.HasIndex(u => u.Id).IsUnique();
         }
     }
 }
