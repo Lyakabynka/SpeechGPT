@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SpeechGPT.Application\SpeechGPT.Application.csproj" />
+    <ProjectReference Include="..\SpeechGPT.Domain\SpeechGPT.Domain.csproj" />
+    <ProjectReference Include="..\SpeechGPT.Persistence\SpeechGPT.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>

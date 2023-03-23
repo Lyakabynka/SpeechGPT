@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33103.184
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{5CB53F1E-8DEE-49CF-AC51-245145C02DFE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{8498668E-EC44-450B-9FDC-93013663AB72}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{E9C88EA1-0AA2-4147-9AB7-2CEFC9CE5540}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeechGPT.Application", "SpeechGPT.Application\SpeechGPT.Application.csproj", "{A235180A-D0D6-432D-B6DD-0B719482C3FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeechGPT.Domain", "SpeechGPT.Domain\SpeechGPT.Domain.csproj", "{07BB427A-7813-4E27-B24B-1E1FD0138B14}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeechGPT.Persistence", "SpeechGPT.Persistence\SpeechGPT.Persistence.csproj", "{1B10A84A-CEAA-4885-A0DE-F942087A76AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeechGPT.Presentation", "SpeechGPT.Presentation\SpeechGPT.Presentation.csproj", "{22AC8047-8175-44D7-8DBD-2FC6D5ADA8B1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A235180A-D0D6-432D-B6DD-0B719482C3FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A235180A-D0D6-432D-B6DD-0B719482C3FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A235180A-D0D6-432D-B6DD-0B719482C3FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A235180A-D0D6-432D-B6DD-0B719482C3FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07BB427A-7813-4E27-B24B-1E1FD0138B14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07BB427A-7813-4E27-B24B-1E1FD0138B14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07BB427A-7813-4E27-B24B-1E1FD0138B14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07BB427A-7813-4E27-B24B-1E1FD0138B14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B10A84A-CEAA-4885-A0DE-F942087A76AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B10A84A-CEAA-4885-A0DE-F942087A76AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B10A84A-CEAA-4885-A0DE-F942087A76AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B10A84A-CEAA-4885-A0DE-F942087A76AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22AC8047-8175-44D7-8DBD-2FC6D5ADA8B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22AC8047-8175-44D7-8DBD-2FC6D5ADA8B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22AC8047-8175-44D7-8DBD-2FC6D5ADA8B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22AC8047-8175-44D7-8DBD-2FC6D5ADA8B1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A235180A-D0D6-432D-B6DD-0B719482C3FD} = {8498668E-EC44-450B-9FDC-93013663AB72}
+		{07BB427A-7813-4E27-B24B-1E1FD0138B14} = {8498668E-EC44-450B-9FDC-93013663AB72}
+		{1B10A84A-CEAA-4885-A0DE-F942087A76AE} = {5CB53F1E-8DEE-49CF-AC51-245145C02DFE}
+		{22AC8047-8175-44D7-8DBD-2FC6D5ADA8B1} = {E9C88EA1-0AA2-4147-9AB7-2CEFC9CE5540}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {74EBF311-72FA-4CBB-AEF3-2CBD2F812055}
+	EndGlobalSection
+EndGlobal
