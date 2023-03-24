@@ -9,13 +9,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{8498668E-E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{E9C88EA1-0AA2-4147-9AB7-2CEFC9CE5540}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeechGPT.Application", "SpeechGPT.Application\SpeechGPT.Application.csproj", "{A235180A-D0D6-432D-B6DD-0B719482C3FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpeechGPT.Application", "SpeechGPT.Application\SpeechGPT.Application.csproj", "{A235180A-D0D6-432D-B6DD-0B719482C3FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeechGPT.Domain", "SpeechGPT.Domain\SpeechGPT.Domain.csproj", "{07BB427A-7813-4E27-B24B-1E1FD0138B14}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpeechGPT.Domain", "SpeechGPT.Domain\SpeechGPT.Domain.csproj", "{07BB427A-7813-4E27-B24B-1E1FD0138B14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeechGPT.Persistence", "SpeechGPT.Persistence\SpeechGPT.Persistence.csproj", "{1B10A84A-CEAA-4885-A0DE-F942087A76AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpeechGPT.Persistence", "SpeechGPT.Persistence\SpeechGPT.Persistence.csproj", "{1B10A84A-CEAA-4885-A0DE-F942087A76AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeechGPT.Presentation", "SpeechGPT.Presentation\SpeechGPT.Presentation.csproj", "{22AC8047-8175-44D7-8DBD-2FC6D5ADA8B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpeechGPT.WebApi", "SpeechGPT.Presentation\SpeechGPT.WebApi.csproj", "{22AC8047-8175-44D7-8DBD-2FC6D5ADA8B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

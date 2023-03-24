@@ -1,7 +1,6 @@
-﻿using SpeechGPT.Application;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace SpeechGPT.Application.Exceptions
+namespace SpeechGPT.Application.Common.Exceptions
 {
 
     public interface IExpectedApiException

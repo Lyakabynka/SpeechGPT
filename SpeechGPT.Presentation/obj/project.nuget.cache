@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "9ktWrGv6Y2AZ2FAz0z8EW9IY4I82ahj77LpPbA/Hjp9gjvzDam3tEWOOX8SsBG/CiK2or3Da0CL0Gs2LVXPvWg==",
+  "dgSpecHash": "uQHpX6nbogMCcJoEv0qfwy/Q8KAlU6tIMuXXUrFtgT3UIoJwbMNVSbHWVQ+LGtCxgUKOZFxKo/ESeR93J9kuCQ==",
   "success": true,
   "projectFilePath": "D:\\Code\\Visual Studio Projects\\SpeechGPT.Backend\\SpeechGPT.Presentation\\SpeechGPT.WebApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\dima1\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\dima1\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.0\\automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",
     "C:\\Users\\dima1\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\dima1\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
     "C:\\Users\\dima1\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
