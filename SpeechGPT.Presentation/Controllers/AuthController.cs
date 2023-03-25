@@ -1,27 +1,41 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using SpeechGPT.Application.CQRS.Commands;
+using SpeechGPT.Application.CQRS.Queries;
+using SpeechGPT.Application.Services;
+using SpeechGPT.WebApi.ActionResults;
 using SpeechGPT.WebApi.Models.Auth;
 
 namespace SpeechGPT.Presentation.Controllers
 {
-    [Route("api/user")]
+    [Route("api/auth")]
     public class AuthController : BaseController
     {
         private readonly IMapper _mapper;
+        private readonly JwtProvider _jwtProvider;
 
-        public AuthController(IMapper mapper) =>
-            _mapper = mapper;
+        public AuthController(IMapper mapper, JwtProvider jwtProvider) =>
+            (_mapper,_jwtProvider) = (mapper,jwtProvider);
 
-        [Route("register")]
-        public async Task<IActionResult> Register(
-            [FromBody] RegisterUserDto request)
+        /// <summary>
+        /// User login
+        /// </summary>
+        ///
+        /// <param name="request">User credentials login dto</param>
+        /// <response code="200">Success / user_not_found / user_password_incorrect</response>
+        [HttpPost("login")]
+        public async Task<ActionResult> Login(
+            [FromBody] LoginUserDto request)
         {
-            var command = _mapper.Map<RegisterUserCommand>(request);
+            var command = _mapper.Map<GetUserByCredentialsCommand>(request);
 
-            await Mediator.Send(command);
+            var user = await Mediator.Send(command);
 
-            return Ok();
+            var token = _jwtProvider.CreateToken(user);
+
+            return new WebApiResult()
+            {
+                Data = token,
+            };
         }
     }
 }

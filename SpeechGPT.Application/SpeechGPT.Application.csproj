@@ -17,8 +17,4 @@
     <ProjectReference Include="..\SpeechGPT.Domain\SpeechGPT.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="CQRS\Queries\" />
-  </ItemGroup>
-
 </Project>

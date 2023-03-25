@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SpeechGPT.Application.Interfaces;
 using SpeechGPT.Application.Services;
+using System.Reflection;
 
 namespace SpeechGPT.Application
 {
@@ -10,9 +11,11 @@ namespace SpeechGPT.Application
         {
             services.AddScoped<IEmailService,EmailService>();
 
+            services.AddScoped<JwtProvider>();
+
             services.AddMediatR(config =>
             {
-                config.RegisterServicesFromAssemblies(typeof(IAppDbContext).Assembly);
+                config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
             });
 
             //add auto mapper

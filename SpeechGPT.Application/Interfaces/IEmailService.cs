@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpeechGPT.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace SpeechGPT.Application.Interfaces
 {
     public interface IEmailService
     {
-        void SendRegistrationEmail(string email);
+        Task SendRegistrationEmailAsync(User user);
     }
 }

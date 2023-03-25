@@ -33,7 +33,7 @@ namespace SpeechGPT.WebApi.Middleware
 
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            var code = HttpStatusCode.InternalServerError;
+            context.Response.ContentType = "application/json";
             var response = new WebApiResult();
 
             //catches interface because fails on Serializing to JSON ExpectedApiException

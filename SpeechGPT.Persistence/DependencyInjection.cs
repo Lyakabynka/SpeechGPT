@@ -13,7 +13,11 @@ namespace SpeechGPT.Persistence
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(connectionString);
+                options.UseSqlServer(connectionString, b=>b.MigrationsAssembly("SpeechGPT.WebApi"));
+
+                // will not track entities if any changes occure
+                // i need to specify by myself in PUT queries ( .AsTracking )
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
             services.AddScoped<IAppDbContext>(provider => 
                 provider.GetRequiredService<AppDbContext>());

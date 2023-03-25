@@ -8,7 +8,7 @@ namespace SpeechGPT.Application.CQRS.Commands
 {
     public class RegisterUserCommand : IRequest
     {
-        public string Nickname { get; set; }
+        public string Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
     }
@@ -24,17 +24,18 @@ namespace SpeechGPT.Application.CQRS.Commands
         {
             var existingUser = await _context.Users
                 .FirstOrDefaultAsync(u => 
-                                    u.Nickname == request.Nickname 
-                                    || string.Equals(u.Email.ToLower(),request.Email.ToLower()),
+                                  string.Equals(u.UserName.ToLower(),request.Username.ToLower()) 
+                                     || string.Equals(u.Email.ToLower(),request.Email.ToLower()),
                                   cancellationToken);
 
             if (existingUser is not null)
             {
-                var existingPropertyName = existingUser.Nickname == request.Nickname
-                    ? nameof(request.Nickname)
+                //also will be Username if both Username and Email exist
+                var existingPropertyName = existingUser.UserName == request.Username
+                    ? nameof(request.Username)
                     : nameof(request.Email);
-                var existingPropertyValue = existingUser.Nickname == request.Nickname
-                    ? request.Nickname
+                var existingPropertyValue = existingUser.UserName == request.Username
+                    ? request.Username
                     : request.Email;
 
                 throw new ExpectedApiException()
@@ -48,14 +49,20 @@ namespace SpeechGPT.Application.CQRS.Commands
 
             var User = new User()
             {
-                Nickname = request.Nickname,
+                UserName = request.Username,
                 Email = request.Email,
-                PasswordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password, BCrypt.Net.HashType.SHA512),
+                PasswordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password),
                 Role = Role.User,
+                EmailConfirmed = false,
+                ConfirmEmailCode = new ConfirmEmailCode(),
             };
+
+            //todo
+            //await _emailService.SendRegistrationEmailAsync(User);
 
             _context.Users.Add(User);
             await _context.SaveChangesAsync(cancellationToken);
+
         }
     }
 }
