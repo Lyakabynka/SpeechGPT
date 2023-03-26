@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SpeechGPT.Application;
 using SpeechGPT.Application.Common.Mappings;
@@ -7,6 +9,7 @@ using SpeechGPT.WebApi;
 using SpeechGPT.WebApi.Middleware;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,10 +22,32 @@ builder.Services.AddCustomConfigurations(builder.Configuration);
 builder.Services.AddControllers();
 
 builder.Services.AddAuthentication()
-    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme);
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuerSigningKey = true,
+            ValidateAudience = false, // to change
+            ValidateIssuer = false, // to change
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt:Key").Value!))
+            //to change method of getting Key
+        };
+    }
+    );
 
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddApplication();
+
+builder.Services.AddCors(options =>
+{
+    // All clients (temporary)
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyHeader();
+        policy.AllowAnyMethod();
+        policy.AllowAnyOrigin();
+    });
+});
 
 builder.Services.AddAutoMapper(config =>
 {
@@ -54,13 +79,16 @@ app.UseSwaggerUI(config =>
 {
     // show swagger page using root Uri
     config.RoutePrefix = string.Empty;
-
+    
     config.SwaggerEndpoint("swagger/v1/swagger.json", "SpeechGPT.Backend");
 });
 app.UseCustomExceptionHandler();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Activate "AllowAll" CORS policy
+app.UseCors("AllowAll");
 
 app.MapControllers();
 

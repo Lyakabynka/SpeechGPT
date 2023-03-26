@@ -37,7 +37,7 @@ namespace SpeechGPT.WebApi.Middleware
             var response = new WebApiResult();
 
             //catches interface because fails on Serializing to JSON ExpectedApiException
-            // ( something non-serializable in Excecption class )
+            // ( something non-serializable in Exception class )
             switch (exception)
             {
                 case IExpectedApiException expectedApiException:

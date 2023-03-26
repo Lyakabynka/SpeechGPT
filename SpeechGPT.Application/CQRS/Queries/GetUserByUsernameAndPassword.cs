@@ -6,24 +6,25 @@ using SpeechGPT.Domain;
 
 namespace SpeechGPT.Application.CQRS.Queries
 {
-    public class GetUserByCredentialsCommand : IRequest<User>
+    public class GetUserByUsernameAndPasswordCommand : IRequest<User>
     {
         public string UserName { get; set; }
         public string Password { get; set; }
     }
 
-    public class GetUserByCredentialsCommandHandler : IRequestHandler<GetUserByCredentialsCommand, User>
+    public class GetUserByUsernameAndPasswordCommandHandler : IRequestHandler<GetUserByUsernameAndPasswordCommand, User>
     {
         private readonly IAppDbContext _context;
-        public GetUserByCredentialsCommandHandler(IAppDbContext context) =>
+        public GetUserByUsernameAndPasswordCommandHandler(IAppDbContext context) =>
             _context = context;
 
-        public async Task<User> Handle(GetUserByCredentialsCommand request, CancellationToken cancellationToken)
+        public async Task<User> Handle(GetUserByUsernameAndPasswordCommand request, CancellationToken cancellationToken)
         {
             //get user by given username
             var user = await _context.Users
                 .FirstOrDefaultAsync(user => 
-                    string.Equals(user.UserName,request.UserName.ToLower()));
+                    string.Equals(user.UserName,request.UserName.ToLower()),
+                    cancellationToken);
 
             //if user not found, exception
             if (user is null)
@@ -36,7 +37,7 @@ namespace SpeechGPT.Application.CQRS.Queries
                     ErrorCode = ErrorCode.UserNotFound,
                     ReasonField =  reasonField,
                     PublicErrorMessage = $"User with given {reasonField} was not found",
-                    LogErrorMessage = $"Get user by credentials error. User with username [{reasonValue}] was not found"
+                    LogErrorMessage = $"Get user by UserName and Password error. User with username [{reasonValue}] was not found"
                 };
             }
 
@@ -51,7 +52,7 @@ namespace SpeechGPT.Application.CQRS.Queries
                     ErrorCode = ErrorCode.UserPasswordIncorrect,
                     ReasonField = reasonField,
                     PublicErrorMessage = $"User with given {reasonField} was not found",
-                    LogErrorMessage = $"Get user by credentials error. Wrong password to user [{user.UserName}]"
+                    LogErrorMessage = $"Get user by UserName and Password error. Wrong password to user [{user.UserName}]"
                 };
             }
 

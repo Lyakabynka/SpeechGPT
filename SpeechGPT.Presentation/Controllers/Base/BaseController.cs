@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SpeechGPT.Presentation.Controllers
+namespace SpeechGPT.WebApi.Controllers.Base
 {
     [ApiController]
     public class BaseController : ControllerBase

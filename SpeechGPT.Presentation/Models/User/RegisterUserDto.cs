@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SpeechGPT.WebApi.Models.User
 {
-    public class RegisterUserDto : IMappable<RegisterUserCommand>
+    public class RegisterUserDto : IMappable<CreateUserCommand>
     {
         public string UserName { get; set; }
         public string Email { get; set; }
@@ -17,7 +17,7 @@ namespace SpeechGPT.WebApi.Models.User
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<RegisterUserDto,RegisterUserCommand>();
+            profile.CreateMap<RegisterUserDto,CreateUserCommand>();
         }
     }
 }

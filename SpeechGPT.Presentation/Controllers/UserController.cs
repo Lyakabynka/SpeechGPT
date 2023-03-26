@@ -1,13 +1,16 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SpeechGPT.Application.CQRS.Commands;
-using SpeechGPT.Presentation.Controllers;
+using SpeechGPT.WebApi.Controllers.Base;
 using SpeechGPT.WebApi.ActionResults;
+using SpeechGPT.WebApi.Models.Auth;
 using SpeechGPT.WebApi.Models.User;
+using SpeechGPT.Application.CQRS.Queries;
 
 namespace SpeechGPT.WebApi.Controllers
 {
-    [Route("api/user")]
+    [Route("api/users")]
     public class UserController : BaseController
     {
         private readonly IMapper _mapper;
@@ -20,22 +23,45 @@ namespace SpeechGPT.WebApi.Controllers
         /// </summary>
         /// <param name="request">Register user credentials dto</param>
         /// <response code="200">Success / user_already_exists</response>
-        [HttpPost("register")]
+        [HttpPost]
         public async Task<ActionResult> Register(
             [FromBody] RegisterUserDto request)
         {
-            var command = _mapper.Map<RegisterUserCommand>(request);
+            var command = _mapper.Map<CreateUserCommand>(request);
 
             await Mediator.Send(command);
 
             return new WebApiResult();
         }
 
-        // ( for admins )
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> Delete()
+        {
+            throw new NotImplementedException();
+            return Ok();
+        }
 
-        //delete user
-        
-        //get user data
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> GetUser(
+            [FromQuery] GetUserDto request)
+        {
+            var query = _mapper.Map<GetUserCommand>(request);
+
+            var userVm = await Mediator.Send(query);
+
+            return new WebApiResult()
+            {
+                Data = userVm
+            };
+        }
+
 
         //update user data
     }

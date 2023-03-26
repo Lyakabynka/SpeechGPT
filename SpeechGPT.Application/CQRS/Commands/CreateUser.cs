@@ -6,36 +6,36 @@ using SpeechGPT.Domain;
 
 namespace SpeechGPT.Application.CQRS.Commands
 {
-    public class RegisterUserCommand : IRequest
+    public class CreateUserCommand : IRequest
     {
-        public string Username { get; set; }
+        public string UserName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
     }
 
 
-    public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand>
+    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand>
     {
         private readonly IAppDbContext _context;
         private readonly IEmailService _emailService;
-        public RegisterUserCommandHandler(IAppDbContext context, IEmailService emailService) =>
+        public CreateUserCommandHandler(IAppDbContext context, IEmailService emailService) =>
             (_context, _emailService) = (context, emailService);
-        public async Task Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+        public async Task Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             var existingUser = await _context.Users
                 .FirstOrDefaultAsync(u => 
-                                  string.Equals(u.UserName.ToLower(),request.Username.ToLower()) 
+                                  string.Equals(u.UserName.ToLower(),request.UserName.ToLower()) 
                                      || string.Equals(u.Email.ToLower(),request.Email.ToLower()),
                                   cancellationToken);
 
             if (existingUser is not null)
             {
                 //also will be Username if both Username and Email exist
-                var existingPropertyName = existingUser.UserName == request.Username
-                    ? nameof(request.Username)
+                var existingPropertyName = existingUser.UserName == request.UserName
+                    ? nameof(request.UserName)
                     : nameof(request.Email);
-                var existingPropertyValue = existingUser.UserName == request.Username
-                    ? request.Username
+                var existingPropertyValue = existingUser.UserName == request.UserName
+                    ? request.UserName
                     : request.Email;
 
                 throw new ExpectedApiException()
@@ -49,7 +49,7 @@ namespace SpeechGPT.Application.CQRS.Commands
 
             var User = new User()
             {
-                UserName = request.Username,
+                UserName = request.UserName,
                 Email = request.Email,
                 PasswordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password),
                 Role = Role.User,
