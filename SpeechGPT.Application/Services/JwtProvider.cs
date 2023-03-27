@@ -1,6 +1,7 @@
 ﻿
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using SpeechGPT.Application.Configurations;
+using SpeechGPT.Application.Options;
 using SpeechGPT.Domain;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -10,9 +11,9 @@ namespace SpeechGPT.Application.Services
 {
     public class JwtProvider
     {
-        private readonly JwtProviderConfiguration _configuration;
-        public JwtProvider(JwtProviderConfiguration configuration) =>
-            _configuration = configuration;
+        private readonly JwtOptions _options;
+        public JwtProvider(IOptions<JwtOptions> options) =>
+            _options = options.Value;
             
         public string CreateToken(User user)
         {
@@ -22,16 +23,17 @@ namespace SpeechGPT.Application.Services
                 new Claim(ClaimTypes.Role, user.Role.ToString())
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.Key));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey));
 
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha384Signature);
 
             var token = new JwtSecurityToken(
-                _configuration.Issuer,
-                _configuration.Audience,
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(_configuration.MinutesToExpiration),
-                signingCredentials: credentials
+                _options.Issuer,
+                _options.Audience,
+                claims,
+                null,
+                DateTime.Now.AddMinutes(_options.MinutesToExpiration),
+                credentials
                 );
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);

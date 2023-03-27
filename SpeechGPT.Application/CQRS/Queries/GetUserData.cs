@@ -27,9 +27,9 @@ namespace SpeechGPT.Application.CQRS.Queries
             var user = 
                 request.Id != null
                     ? await _context.Users.FindAsync(request.Id,cancellationToken)
-                : string.IsNullOrWhiteSpace(request.UserName)
+                : !string.IsNullOrWhiteSpace(request.UserName)
                     ? await _context.Users.FirstOrDefaultAsync(u=>u.UserName == request.UserName, cancellationToken)
-                : string.IsNullOrWhiteSpace(request.Email) 
+                : !string.IsNullOrWhiteSpace(request.Email) 
                     ? await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken)
                 : null;
 
@@ -39,7 +39,7 @@ namespace SpeechGPT.Application.CQRS.Queries
                 {
                     ErrorCode = ErrorCode.UserNotFound,
                     PublicErrorMessage = $"User with given parameter was not found.",
-                    LogErrorMessage = $"User with given parameter was not found."
+                    LogErrorMessage = $"Get UserVm error. User with given parameter was not found."
                 };
             }
 

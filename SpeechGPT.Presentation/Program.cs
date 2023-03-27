@@ -4,6 +4,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SpeechGPT.Application;
 using SpeechGPT.Application.Common.Mappings;
+using SpeechGPT.Application.Options.OptionSetups;
+using SpeechGPT.Application.Options;
 using SpeechGPT.Persistence;
 using SpeechGPT.WebApi;
 using SpeechGPT.WebApi.Middleware;
@@ -17,23 +19,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // TO Inject the JwtProviderConfiguration and
 // Assign the values from section 'Jwt' to its properties
-builder.Services.AddCustomConfigurations(builder.Configuration);
 
 builder.Services.AddControllers();
 
-builder.Services.AddAuthentication()
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters()
-        {
-            ValidateIssuerSigningKey = true,
-            ValidateAudience = false, // to change
-            ValidateIssuer = false, // to change
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt:Key").Value!))
-            //to change method of getting Key
-        };
-    }
-    );
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer();
 
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddApplication();
@@ -71,6 +61,9 @@ builder.Services.AddSwaggerGen(config =>
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     config.IncludeXmlComments(xmlPath);
 });
+
+//Configures options inside .AddJwtBearer(options)
+builder.Services.AddCustomConfigurations(builder.Configuration);
 
 var app = builder.Build();
 

@@ -1,9 +1,9 @@
 ﻿
-namespace SpeechGPT.Application.Configurations
+namespace SpeechGPT.Application.Options
 {
-    public class JwtProviderConfiguration
+    public class JwtOptions
     {
-        public string Key { get; set; }
+        public string SecretKey { get; set; }
         public string Issuer { get; set; }
         public string Audience { get; set; }
         public int MinutesToExpiration { get; set; }

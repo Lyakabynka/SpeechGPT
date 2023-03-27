@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "6eg7QH/XgQPRMjZAmeVc9cJ0tjxMrAMwML8iChWM8vCSE5F5yEQ0HLUDAACmap6NeiETmVeSrOBS4shhflOd0Q==",
+  "dgSpecHash": "zYWXovDPg5uJdig81nuAgYf5MBdwLK/Cs0/X57VPgIqcoSoc1pmy5Rr8DIzP1GcwLrkv43jPDEw92vmGtIaySw==",
   "success": true,
   "projectFilePath": "D:\\Code\\Visual Studio Projects\\SpeechGPT.Backend\\SpeechGPT.Presentation\\SpeechGPT.WebApi.csproj",
   "expectedPackageFiles": [
@@ -28,6 +28,7 @@
     "C:\\Users\\dima1\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\7.0.0\\microsoft.extensions.caching.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\dima1\\.nuget\\packages\\microsoft.extensions.caching.memory\\7.0.0\\microsoft.extensions.caching.memory.7.0.0.nupkg.sha512",
     "C:\\Users\\dima1\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\7.0.0\\microsoft.extensions.configuration.abstractions.7.0.0.nupkg.sha512",
+    "C:\\Users\\dima1\\.nuget\\packages\\microsoft.extensions.configuration.binder\\7.0.4\\microsoft.extensions.configuration.binder.7.0.4.nupkg.sha512",
     "C:\\Users\\dima1\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\7.0.0\\microsoft.extensions.dependencyinjection.7.0.0.nupkg.sha512",
     "C:\\Users\\dima1\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\7.0.0\\microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\dima1\\.nuget\\packages\\microsoft.extensions.dependencymodel\\7.0.0\\microsoft.extensions.dependencymodel.7.0.0.nupkg.sha512",

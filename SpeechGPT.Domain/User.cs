@@ -23,7 +23,6 @@ namespace SpeechGPT.Domain
         public ConfirmEmailCode? ConfirmEmailCode { get; set; }
 
 
-        public List<Request> Requests { get; set; }
-        public List<Response> Responses { get; set; }
+        public List<Chat> Chats { get; set; }
     }
 }

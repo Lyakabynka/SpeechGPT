@@ -54,11 +54,7 @@ namespace SpeechGPT.Application.CQRS.Commands
                 PasswordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password),
                 Role = Role.User,
                 EmailConfirmed = false,
-                ConfirmEmailCode = new ConfirmEmailCode(),
             };
-
-            //todo
-            //await _emailService.SendRegistrationEmailAsync(User);
 
             _context.Users.Add(User);
             await _context.SaveChangesAsync(cancellationToken);

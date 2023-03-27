@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Options;
-using SpeechGPT.Application.Configurations;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
+using SpeechGPT.Application.Options;
+using SpeechGPT.Application.Options.OptionSetups;
 
 namespace SpeechGPT.WebApi
 {
@@ -7,9 +9,9 @@ namespace SpeechGPT.WebApi
     {
         public static IServiceCollection AddCustomConfigurations(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<JwtProviderConfiguration>(configuration.GetSection("Jwt"));
-            services.AddSingleton(resolver =>
-                resolver.GetRequiredService<IOptions<JwtProviderConfiguration>>().Value);
+            services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
+            services.ConfigureOptions<JwtBearerOptionsSetup>();
+
 
             return services;
         }
