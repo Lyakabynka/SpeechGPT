@@ -18,7 +18,9 @@ namespace SpeechGPT.Application.CQRS.Queries.ViewModels
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Chat, ChatVm>();
+            profile.CreateMap<Chat, ChatVm>()
+                .ForMember(chatVm => chatVm.MessageVms, option=>
+                    option.MapFrom(chat=>chat.Messages));
         }
     }
 }
