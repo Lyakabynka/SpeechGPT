@@ -96,7 +96,7 @@ namespace SpeechGPT.WebApi.Controllers
 
         
         [Authorize]
-        [HttpGet("chats/{chatId:int}/send")]
+        [HttpPost("chats/{chatId:int}/send")]
         public async Task<ActionResult> GetResponse(
            [FromRoute] int chatId,
            [FromBody] string request)
