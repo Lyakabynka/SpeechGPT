@@ -32,6 +32,7 @@ namespace SpeechGPT.Application.CQRS.Commands
                 throw new ExpectedApiException()
                 {
                     ErrorCode = ErrorCode.UserNotFound,
+                    ReasonField = reasonField,
                     PublicErrorMessage = $"User with given {reasonField} does not exist",
                     LogErrorMessage = $"Delete user error. User with given {reasonField} [{reasonValue}] does not exist"
                 };

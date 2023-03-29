@@ -8,21 +8,21 @@ using SpeechGPT.Domain;
 
 namespace SpeechGPT.Application.CQRS.Queries
 {
-    public class GetUserCommand : IRequest<UserVm>
+    public class GetUserViewModelQuery : IRequest<UserVm>
     {
         public int? Id { get; set; }
         public string? UserName { get; set; }
         public string? Email { get; set; }
     }
 
-    public class GetUserCommandHandler : IRequestHandler<GetUserCommand, UserVm>
+    public class GetUserViewModelQueryHandler : IRequestHandler<GetUserViewModelQuery, UserVm>
     {
         private readonly IAppDbContext _context;
         private readonly IMapper _mapper;
-        public GetUserCommandHandler(IAppDbContext context, IMapper mapper) =>
+        public GetUserViewModelQueryHandler(IAppDbContext context, IMapper mapper) =>
             (_context,_mapper) = (context,mapper);
 
-        public async Task<UserVm> Handle(GetUserCommand request, CancellationToken cancellationToken)
+        public async Task<UserVm> Handle(GetUserViewModelQuery request, CancellationToken cancellationToken)
         {
             var user = 
                 request.Id != null

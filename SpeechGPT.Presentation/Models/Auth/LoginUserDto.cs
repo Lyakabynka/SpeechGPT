@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace SpeechGPT.WebApi.Models.Auth
 {
-    public class LoginUserDto : IMappable<GetUserByUsernameAndPasswordCommand>
+    public class LoginUserDto : IMappable<GetUserByUsernameAndPasswordQuery>
     {
         public string UserName { get; set; }
         public string Password { get; set; }
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<LoginUserDto, GetUserByUsernameAndPasswordCommand>();
+            profile.CreateMap<LoginUserDto, GetUserByUsernameAndPasswordQuery>();
         }
     }
 }

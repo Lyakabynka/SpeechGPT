@@ -33,6 +33,7 @@ namespace SpeechGPT.Application.Options.OptionSetups
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey)),
                 ClockSkew = TimeSpan.Zero
             };
+            
         }
     }
 }

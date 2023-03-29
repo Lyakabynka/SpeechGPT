@@ -12,13 +12,13 @@ using SpeechGPT.WebApi.Middleware;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 using System.Text;
+using Amazon.Extensions.NETCore.Setup;
+using Amazon.Internal;
+using Amazon.Runtime;
+using Amazon;
+using Amazon.Runtime.CredentialManagement;
 
 var builder = WebApplication.CreateBuilder(args);
-
-//builder.Configuration.AddEnvironmentVariables();
-
-// TO Inject the JwtProviderConfiguration and
-// Assign the values from section 'Jwt' to its properties
 
 builder.Services.AddControllers();
 

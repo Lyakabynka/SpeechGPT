@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SpeechGPT.Application.CQRS.Queries;
 using SpeechGPT.Application.Services;
 using SpeechGPT.WebApi.ActionResults;
 using SpeechGPT.WebApi.Controllers.Base;
 using SpeechGPT.WebApi.Models.Auth;
+using System.Security.Claims;
 
 namespace SpeechGPT.Presentation.Controllers
 {
@@ -27,9 +30,9 @@ namespace SpeechGPT.Presentation.Controllers
         public async Task<ActionResult> Login(
             [FromBody] LoginUserDto request)
         {
-            var command = _mapper.Map<GetUserByUsernameAndPasswordCommand>(request);
+            var query = _mapper.Map<GetUserByUsernameAndPasswordQuery>(request);
 
-            var user = await Mediator.Send(command);
+            var user = await Mediator.Send(query);
 
             var token = _jwtProvider.CreateToken(user);
 

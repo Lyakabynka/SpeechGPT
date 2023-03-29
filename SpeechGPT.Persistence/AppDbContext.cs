@@ -13,8 +13,8 @@ namespace SpeechGPT.Persistence
     public class AppDbContext : DbContext, IAppDbContext
     {
         public DbSet<User> Users { get; set; }
-        public DbSet<Request> Requests { get; set; }
-        public DbSet<Response> Responses { get; set; }
+        public DbSet<Chat> Chats { get; set; }
+        public DbSet<Message> Messages { get; set; }
         public DbSet<ConfirmEmailCode> ConfirmEmailCodes { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) 

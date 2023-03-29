@@ -22,6 +22,28 @@ namespace SpeechGPT.WebApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("SpeechGPT.Domain.Chat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Chats");
+                });
+
             modelBuilder.Entity("SpeechGPT.Domain.ConfirmEmailCode", b =>
                 {
                     b.Property<int>("Id")
@@ -44,7 +66,7 @@ namespace SpeechGPT.WebApi.Migrations
                     b.ToTable("ConfirmEmailCodes");
                 });
 
-            modelBuilder.Entity("SpeechGPT.Domain.Request", b =>
+            modelBuilder.Entity("SpeechGPT.Domain.Message", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -56,42 +78,20 @@ namespace SpeechGPT.WebApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
+                    b.Property<int>("ChatId")
                         .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Requests");
-                });
-
-            modelBuilder.Entity("SpeechGPT.Domain.Response", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Body")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("MessageType")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ChatId");
 
-                    b.ToTable("Responses");
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("SpeechGPT.Domain.User", b =>
@@ -113,12 +113,12 @@ namespace SpeechGPT.WebApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserRole")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -126,6 +126,17 @@ namespace SpeechGPT.WebApi.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("SpeechGPT.Domain.Chat", b =>
+                {
+                    b.HasOne("SpeechGPT.Domain.User", "User")
+                        .WithMany("Chats")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SpeechGPT.Domain.ConfirmEmailCode", b =>
@@ -139,35 +150,27 @@ namespace SpeechGPT.WebApi.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SpeechGPT.Domain.Request", b =>
+            modelBuilder.Entity("SpeechGPT.Domain.Message", b =>
                 {
-                    b.HasOne("SpeechGPT.Domain.User", "User")
-                        .WithMany("Requests")
-                        .HasForeignKey("UserId")
+                    b.HasOne("SpeechGPT.Domain.Chat", "Chat")
+                        .WithMany("Messages")
+                        .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Chat");
                 });
 
-            modelBuilder.Entity("SpeechGPT.Domain.Response", b =>
+            modelBuilder.Entity("SpeechGPT.Domain.Chat", b =>
                 {
-                    b.HasOne("SpeechGPT.Domain.User", "User")
-                        .WithMany("Responses")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("SpeechGPT.Domain.User", b =>
                 {
+                    b.Navigation("Chats");
+
                     b.Navigation("ConfirmEmailCode");
-
-                    b.Navigation("Requests");
-
-                    b.Navigation("Responses");
                 });
 #pragma warning restore 612, 618
         }

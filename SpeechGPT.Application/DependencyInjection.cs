@@ -18,8 +18,6 @@ namespace SpeechGPT.Application
                 config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
             });
 
-            //add auto mapper
-
             return services;
         }
     }

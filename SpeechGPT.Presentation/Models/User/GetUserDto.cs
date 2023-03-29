@@ -4,7 +4,7 @@ using SpeechGPT.Application.CQRS.Queries;
 
 namespace SpeechGPT.WebApi.Models.User
 {
-    public class GetUserDto : IMappable<GetUserCommand>
+    public class GetUserDto : IMappable<GetUserViewModelQuery>
     {
         public int? Id { get; set; }
         public string? Username { get; set; }
@@ -12,7 +12,7 @@ namespace SpeechGPT.WebApi.Models.User
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<GetUserDto, GetUserCommand>();
+            profile.CreateMap<GetUserDto, GetUserViewModelQuery>();
         }
     }
 }

@@ -6,19 +6,19 @@ using SpeechGPT.Domain;
 
 namespace SpeechGPT.Application.CQRS.Queries
 {
-    public class GetUserByUsernameAndPasswordCommand : IRequest<User>
+    public class GetUserByUsernameAndPasswordQuery : IRequest<User>
     {
         public string UserName { get; set; }
         public string Password { get; set; }
     }
 
-    public class GetUserByUsernameAndPasswordCommandHandler : IRequestHandler<GetUserByUsernameAndPasswordCommand, User>
+    public class GetUserByUsernameAndPasswordQueryHandler : IRequestHandler<GetUserByUsernameAndPasswordQuery, User>
     {
         private readonly IAppDbContext _context;
-        public GetUserByUsernameAndPasswordCommandHandler(IAppDbContext context) =>
+        public GetUserByUsernameAndPasswordQueryHandler(IAppDbContext context) =>
             _context = context;
 
-        public async Task<User> Handle(GetUserByUsernameAndPasswordCommand request, CancellationToken cancellationToken)
+        public async Task<User> Handle(GetUserByUsernameAndPasswordQuery request, CancellationToken cancellationToken)
         {
             //get user by given username
             var user = await _context.Users
@@ -51,7 +51,7 @@ namespace SpeechGPT.Application.CQRS.Queries
                 {
                     ErrorCode = ErrorCode.UserPasswordIncorrect,
                     ReasonField = reasonField,
-                    PublicErrorMessage = $"User with given {reasonField} was not found",
+                    PublicErrorMessage = $"{reasonField} does not match.",
                     LogErrorMessage = $"Get user by UserName and Password error. Wrong password to user [{user.UserName}]"
                 };
             }

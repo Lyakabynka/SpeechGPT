@@ -5,19 +5,17 @@ using SpeechGPT.Domain.Enums;
 
 namespace SpeechGPT.Application.CQRS.Queries.ViewModels
 {
-    public class UserVm : IMappable<User>
+    public class MessageVm : IMappable<Message>
     {
         public int Id { get; set; }
-        public string UserName { get; set; }
-        public string Email { get; set; }
+        public string Body { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-        public UserRole UserRole { get; set; }
-
-        public bool EmailConfirmed { get; set; }
+        public MessageType MessageType { get; set; }
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<User, UserVm>();
+            profile.CreateMap<Message, MessageVm>();
         }
     }
 }

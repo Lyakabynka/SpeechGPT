@@ -8,6 +8,8 @@ using SpeechGPT.WebApi.Models.Auth;
 using SpeechGPT.WebApi.Models.User;
 using SpeechGPT.Application.CQRS.Queries;
 using System.Net;
+using System.Security.Claims;
+using SpeechGPT.Domain.Enums;
 
 namespace SpeechGPT.WebApi.Controllers
 {
@@ -29,84 +31,106 @@ namespace SpeechGPT.WebApi.Controllers
         public async Task<ActionResult> Register(
             [FromBody] RegisterUserDto request)
         {
-            var command = _mapper.Map<CreateUserCommand>(request);
+            var command = _mapper.Map<RegisterUserCommand>(request);
 
             await Mediator.Send(command);
 
             return new WebApiResult();
         }
 
-
-        /// <summary>
-        /// Deletes the user
-        /// </summary>
-        /// <param name="userId">Delete user id</param>
-        /// <response code="200">Success / user_not_found</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="403">Forbidden</response>
-        [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> Delete(
-            [FromQuery] int userId)
+        [Authorize]
+        [HttpPost("chats")]
+        public async Task<ActionResult> CreateChat()
         {
-            var command = new DeleteUserCommand() { UserId = userId };
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var command = new CreateChatCommand()
+            {
+                UserId = userId,
+            };
 
             await Mediator.Send(command);
 
             return new WebApiResult();
         }
 
-        /// <summary>
-        /// Gets the user
-        /// </summary>
-        /// 
-        /// <param name="request">Get user dto (id/username/password)</param>
-        /// 
-        /// <response code="200">Success / user_not_found</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="403">Forbidden</response>
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> GetUser(
-            [FromQuery] GetUserDto request)
+        [Authorize]
+        [HttpGet("chats/{chatId:int}")]
+        public async Task<ActionResult> GetChat(
+            [FromRoute] int chatId)
         {
-            var query = _mapper.Map<GetUserCommand>(request);
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            var userVm = await Mediator.Send(query);
+            var query = new GetChatVmQuery()
+            {
+                ChatId = chatId,
+                UserId = userId
+            };
+
+            var chat = await Mediator.Send(query);
 
             return new WebApiResult()
             {
-                Data = userVm
+                Data = chat,
             };
         }
 
-
-        /*/// <summary>
-        /// Updates the user
-        /// </summary>
-        /// <param name="userId">Update user id</param>
-        /// <response code="200">Success / user_not_found</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="403">Forbidden</response>
-        [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> Update(
-            [FromQuery] int userId)
+        [Authorize]
+        [HttpGet("chats")]
+        public async Task<ActionResult> GetChats()
         {
-            var command = new DeleteUserCommand() { UserId = userId };
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            await Mediator.Send(command);
+            var query = new GetChatPreviewVmsQuery()
+            {
+                UserId = userId
+            };
 
-            return new WebApiResult();
-        }*/
+            var chatPreviewVms = await Mediator.Send(query);
+
+            return new WebApiResult()
+            {
+                Data = chatPreviewVms
+            };
+        }
+
+        
+        [Authorize]
+        [HttpGet("chats/{chatId:int}/send")]
+        public async Task<ActionResult> GetResponse(
+           [FromRoute] int chatId,
+           [FromBody] string request)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            
+            var commandRequest = new CreateMessageCommand()
+            {
+                UserId = userId,
+                ChatId = chatId,
+                Body = request,
+                MessageType = MessageType.Request
+            };
+
+            await Mediator.Send(commandRequest);
+
+            //receive a response from OpenAI Api
+            var response = "Vse okay";
+
+            var commandResponse = new CreateMessageCommand()
+            {
+                UserId = userId,
+                ChatId = chatId,
+                Body = response,
+                MessageType = MessageType.Response
+            };
+
+            await Mediator.Send(commandResponse);
+
+            return new WebApiResult()
+            {
+                Data = response,
+            };
+        }
+
     }
 }

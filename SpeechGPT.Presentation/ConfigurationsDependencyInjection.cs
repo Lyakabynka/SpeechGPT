@@ -9,7 +9,9 @@ namespace SpeechGPT.WebApi
     {
         public static IServiceCollection AddCustomConfigurations(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
+            services.Configure<JwtOptions>(
+                configuration.GetSection(JwtOptions.JwtSection));
+
             services.ConfigureOptions<JwtBearerOptionsSetup>();
 
 

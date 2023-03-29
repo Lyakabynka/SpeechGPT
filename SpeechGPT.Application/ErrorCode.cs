@@ -13,5 +13,7 @@ namespace SpeechGPT.Application
         UserAlreadyExists,
         UserNotFound,
         UserPasswordIncorrect,
+
+        ChatNotFound,
     }
 }

@@ -17,7 +17,7 @@ namespace SpeechGPT.Persistence
 
                 // will not track entities if any changes occure
                 // i need to specify by myself in PUT queries ( .AsTracking )
-                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                //options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
             services.AddScoped<IAppDbContext>(provider => 
                 provider.GetRequiredService<AppDbContext>());

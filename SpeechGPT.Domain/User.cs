@@ -1,13 +1,8 @@
-﻿using System.Numerics;
+﻿using SpeechGPT.Domain.Enums;
+using System.Numerics;
 
 namespace SpeechGPT.Domain
 {
-    public enum Role
-    {
-        User,
-        Admin
-    }
-
     public class User
     {
         public int Id { get; set; }
@@ -16,13 +11,13 @@ namespace SpeechGPT.Domain
         public string Email { get; set; }
         public string PasswordHash { get; set; }
 
-        public Role Role { get; set; }
+        public UserRole UserRole { get; set; }
 
         public bool EmailConfirmed { get; set; }
 
         public ConfirmEmailCode? ConfirmEmailCode { get; set; }
 
 
-        public List<Chat> Chats { get; set; }
+        public List<Chat>? Chats { get; set; }
     }
 }
