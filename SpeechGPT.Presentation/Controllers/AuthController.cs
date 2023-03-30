@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SpeechGPT.Application.CQRS.Queries;
-using SpeechGPT.Application.Services;
+using SpeechGPT.Persistence.Services;
 using SpeechGPT.WebApi.ActionResults;
 using SpeechGPT.WebApi.Controllers.Base;
 using SpeechGPT.WebApi.Models.Auth;
@@ -23,8 +23,13 @@ namespace SpeechGPT.Presentation.Controllers
         /// <summary>
         /// User login
         /// </summary>
-        ///
-        /// <param name="request">User credentials login dto</param>
+        /// <remarks>
+        /// Sample request:
+        /// POST api/auth/login
+        /// </remarks>
+        /// 
+        /// <param name="request">User credentials login dto (username, password)</param>
+        /// <returns>JWT token</returns>
         /// <response code="200">Success / user_not_found / user_password_incorrect</response>
         [HttpPost("login")]
         public async Task<ActionResult> Login(

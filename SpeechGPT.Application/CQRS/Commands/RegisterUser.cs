@@ -17,7 +17,7 @@ namespace SpeechGPT.Application.CQRS.Commands
     public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand>
     {
         private readonly IAppDbContext _context;
-        public RegisterUserCommandHandler(IAppDbContext context, IEmailService emailService) =>
+        public RegisterUserCommandHandler(IAppDbContext context) =>
             _context = context;
         public async Task Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {

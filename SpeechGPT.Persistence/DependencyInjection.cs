@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SpeechGPT.Application.Interfaces;
+using SpeechGPT.Persistence.Services;
 
 namespace SpeechGPT.Persistence
 {
@@ -21,6 +22,10 @@ namespace SpeechGPT.Persistence
             });
             services.AddScoped<IAppDbContext>(provider => 
                 provider.GetRequiredService<AppDbContext>());
+
+            services.AddScoped<IChatGPT, ChatGPT>();
+
+            services.AddScoped<JwtProvider>();
 
             return services;
         }

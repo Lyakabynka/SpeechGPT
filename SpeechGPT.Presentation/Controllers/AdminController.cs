@@ -19,6 +19,11 @@ namespace SpeechGPT.WebApi.Controllers
         /// <summary>
         /// Deletes the user
         /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// DELETE api/user-management/1
+        /// </remarks>
+        /// 
         /// <param name="userId">Delete user id</param>
         /// <response code="200">Success / user_not_found</response>
         /// <response code="401">Unauthorized</response>
@@ -41,9 +46,13 @@ namespace SpeechGPT.WebApi.Controllers
         /// <summary>
         /// Gets the user
         /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// GET api/user-management
+        /// </remarks>
         /// 
         /// <param name="request">Get user dto (id/username/password)</param>
-        /// 
+        /// <returns>Returns UserVm</returns>
         /// <response code="200">Success / user_not_found</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>

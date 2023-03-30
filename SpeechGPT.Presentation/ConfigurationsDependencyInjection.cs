@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
-using SpeechGPT.Application.Options;
+﻿using SpeechGPT.Application.Options;
 using SpeechGPT.Application.Options.OptionSetups;
 
 namespace SpeechGPT.WebApi
@@ -14,6 +12,9 @@ namespace SpeechGPT.WebApi
 
             services.ConfigureOptions<JwtBearerOptionsSetup>();
 
+
+            services.Configure<ChatGPTOptions>(
+                configuration.GetSection(ChatGPTOptions.ChatGPTSection));
 
             return services;
         }

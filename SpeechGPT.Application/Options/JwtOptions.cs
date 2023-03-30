@@ -3,7 +3,7 @@ namespace SpeechGPT.Application.Options
 {
     public class JwtOptions
     {
-        public static string JwtSection = "Jwt";
+        public static readonly string JwtSection = "Jwt";
 
         public string SecretKey { get; set; }
         public string Issuer { get; set; }
