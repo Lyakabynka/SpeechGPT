@@ -10,6 +10,10 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.Extensions.Caching.Memory;
 using StackExchange.Redis;
+using Microsoft.Extensions.Caching.Distributed;
+using SpeechGPT.Application.Common.Extensions;
+using SpeechGPT.Application.CQRS.Queries.ViewModels;
+using OpenAI.GPT3.ObjectModels.RequestModels;
 
 namespace SpeechGPT.WebApi.Controllers
 {
@@ -17,9 +21,10 @@ namespace SpeechGPT.WebApi.Controllers
     public class ChatController : BaseController
     {
         private readonly IChatGPT _chatGPT;
-        private readonly IRedisCache _redisCache;
-        public ChatController(IChatGPT chatGPT, IRedisCache redisCache) =>
-            (_chatGPT,_redisCache) = (chatGPT,redisCache);
+        private readonly IDistributedCache _cache;
+
+        public ChatController(IChatGPT chatGPT, IDistributedCache cache) =>
+            (_chatGPT,_cache) = (chatGPT,cache);
         
 
         /// <summary>
@@ -71,7 +76,6 @@ namespace SpeechGPT.WebApi.Controllers
         public async Task<ActionResult> GetChat(
             [FromRoute] int chatId)
         {
-
             var query = new GetChatVmQuery()
             {
                 ChatId = chatId,
@@ -79,9 +83,6 @@ namespace SpeechGPT.WebApi.Controllers
             };
 
             var chatVm = await Mediator.Send(query);
-            
-            //Setting the active current user chat in memoryCache
-            //not to get it from database every time
             
             return new WebApiResult()
             {
@@ -135,11 +136,9 @@ namespace SpeechGPT.WebApi.Controllers
            [FromRoute] int chatId,
            [FromQuery] string request)
         {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-
             var commandRequest = new CreateMessageCommand()
             {
-                UserId = userId,
+                UserId = UserId,
                 ChatId = chatId,
                 Body = request,
                 MessageType = MessageType.Request
@@ -148,17 +147,28 @@ namespace SpeechGPT.WebApi.Controllers
             await Mediator.Send(commandRequest);
 
             //todo Receive a response based on previous messages in the chat.
-            var response = await _chatGPT.GetResponse(request);
+            var previousMessages = await _cache.GetRecordAsync<List<ChatMessage>>($"chat:{chatId}");
+            if (previousMessages is null)
+            {
+                previousMessages = await Mediator.Send(null); //get previous messages from database
+            }
+
+            //to finish
+            var response = await _chatGPT.GetResponse(request, previousMessages);
 
             var commandResponse = new CreateMessageCommand()
             {
-                UserId = userId,
+                UserId = UserId,
                 ChatId = chatId,
                 Body = response,
                 MessageType = MessageType.Response
             };
 
             await Mediator.Send(commandResponse);
+
+            //to finih
+            previousMessages.Add(ChatMessage.FromAssistant(response));
+            _cache.SetRecordAsync<List<ChatMessage>>($"chat:{chatId}", previousMessages, TimeSpan.FromMinutes(30));
 
             return new WebApiResult()
             {

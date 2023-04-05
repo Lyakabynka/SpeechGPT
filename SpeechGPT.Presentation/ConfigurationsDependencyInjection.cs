@@ -12,7 +12,6 @@ namespace SpeechGPT.WebApi
 
             services.ConfigureOptions<JwtBearerOptionsSetup>();
 
-
             services.Configure<ChatGPTOptions>(
                 configuration.GetRequiredSection(ChatGPTOptions.ChatGPTSection));
 

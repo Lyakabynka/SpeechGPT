@@ -1,10 +1,8 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SpeechGPT.Application.Interfaces;
 using SpeechGPT.Persistence.Services;
-using SpeechGPT.Persistence.Services.Helpers;
 using StackExchange.Redis;
 
 namespace SpeechGPT.Persistence
@@ -28,9 +26,6 @@ namespace SpeechGPT.Persistence
             services.AddScoped<IChatGPT, ChatGPT>();
 
             services.AddScoped<JwtProvider>();
-
-            services.AddSingleton<ConnectionHelper>();
-            services.AddScoped<IRedisCache, RedisCache>();
 
             return services;
         }
