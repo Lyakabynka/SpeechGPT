@@ -8,7 +8,7 @@ public interface IRedisCache {
     /// <typeparam name="T"></typeparam>
     /// <param name="key"></param>
     /// <returns></returns>
-    T GetCacheData <T> (string key);
+    Task<T> GetCacheData<T> (string key);
     
     /// <summary>
     /// Set Data with Value and Expiration Time of Key
@@ -18,12 +18,12 @@ public interface IRedisCache {
     /// <param name="value"></param>
     /// <param name="expirationTime"></param>
     /// <returns></returns>
-    bool SetCacheData < T > (string key, T value, DateTimeOffset expirationTime);
+    Task<bool> SetCacheData<T> (string key, T value, DateTimeOffset expirationTime);
     
     /// <summary>
     /// Remove Data
     /// </summary>
     /// <param name="key"></param>
     /// <returns></returns>
-    bool RemoveData(string key);
+    Task<bool> RemoveData(string key);
 }

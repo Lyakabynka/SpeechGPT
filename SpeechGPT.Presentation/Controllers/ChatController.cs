@@ -17,9 +17,9 @@ namespace SpeechGPT.WebApi.Controllers
     public class ChatController : BaseController
     {
         private readonly IChatGPT _chatGPT;
-
-        public ChatController(IChatGPT chatGPT) =>
-            (_chatGPT) = (chatGPT);
+        private readonly IRedisCache _redisCache;
+        public ChatController(IChatGPT chatGPT, IRedisCache redisCache) =>
+            (_chatGPT,_redisCache) = (chatGPT,redisCache);
         
 
         /// <summary>

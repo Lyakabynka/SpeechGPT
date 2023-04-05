@@ -21,9 +21,9 @@ public class RedisCache : IRedisCache
         _db = _connectionHelper.Connection.GetDatabase();
     }
 
-    public T GetCacheData<T>(string key)
+    public async Task<T> GetCacheData<T>(string key)
     {
-        var value = _db.StringGet(key);
+        var value = await _db.StringGetAsync(key);
         if (!string.IsNullOrEmpty(value))
         {
             return JsonSerializer.Deserialize<T>(value);
@@ -31,20 +31,20 @@ public class RedisCache : IRedisCache
         return default;
     }
 
-    public bool RemoveData(string key)
+    public async Task<bool> RemoveData(string key)
     {
-        bool _isKeyExist = _db.KeyExists(key);
+        bool _isKeyExist = await _db.KeyExistsAsync(key);
         if (_isKeyExist == true)
         {
-            return _db.KeyDelete(key);
+            return await _db.KeyDeleteAsync(key);
         }
         return false;
     }
 
-    public bool SetCacheData<T>(string key, T value, DateTimeOffset expirationTime)
+    public async Task<bool> SetCacheData<T>(string key, T value, DateTimeOffset expirationTime)
     {
         TimeSpan expiryTime = expirationTime.DateTime.Subtract(DateTime.Now);
-        var isSet = _db.StringSet(key, JsonSerializer.Serialize(value), expiryTime);
+        var isSet = await _db.StringSetAsync(key, JsonSerializer.Serialize(value), expiryTime);
         return isSet;
     }
 }
