@@ -1,26 +1,19 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SpeechGPT.Application;
 using SpeechGPT.Application.Common.Mappings;
-using SpeechGPT.Application.Options.OptionSetups;
-using SpeechGPT.Application.Options;
 using SpeechGPT.Persistence;
 using SpeechGPT.WebApi;
 using SpeechGPT.WebApi.Middleware;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
-using System.Text;
-using Amazon.Extensions.NETCore.Setup;
-using Amazon.Internal;
-using Amazon.Runtime;
-using Amazon;
-using Amazon.Runtime.CredentialManagement;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer();

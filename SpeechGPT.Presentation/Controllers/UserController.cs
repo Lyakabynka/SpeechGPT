@@ -31,6 +31,8 @@ namespace SpeechGPT.WebApi.Controllers
         /// 
         /// <param name="request">Register user dto (username email password)</param>
         /// <response code="200">Success / user_already_exists</response>
+        
+        
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> Register(

@@ -8,14 +8,17 @@ namespace SpeechGPT.WebApi
         public static IServiceCollection AddCustomConfigurations(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<JwtOptions>(
-                configuration.GetSection(JwtOptions.JwtSection));
+                configuration.GetRequiredSection(JwtOptions.JwtSection));
 
             services.ConfigureOptions<JwtBearerOptionsSetup>();
 
 
             services.Configure<ChatGPTOptions>(
-                configuration.GetSection(ChatGPTOptions.ChatGPTSection));
+                configuration.GetRequiredSection(ChatGPTOptions.ChatGPTSection));
 
+            services.Configure<RedisOptions>(
+                configuration.GetRequiredSection(RedisOptions.RedisSection));
+            
             return services;
         }
     }

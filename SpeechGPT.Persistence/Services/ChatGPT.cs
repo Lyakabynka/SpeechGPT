@@ -22,8 +22,17 @@ namespace SpeechGPT.Persistence.Services
                 DefaultModelId = Models.ChatGpt3_5Turbo
             });
         }
+        
         public async Task<string> GetResponse(string requestBody)
         {
+            var chatMessages = new List<ChatMessage>()
+            {
+                
+            };
+            var chatCompletionCreateRequest = new ChatCompletionCreateRequest()
+            {
+                
+            };
             var completionResult = await _gpt3_5.CreateCompletion(new ChatCompletionCreateRequest()
             {
                 Messages = new List<ChatMessage>()
@@ -33,8 +42,7 @@ namespace SpeechGPT.Persistence.Services
                     ChatMessage.FromUser(requestBody)
                 },
                 Temperature = 0.1f,
-                MaxTokens = 200,
-                
+                MaxTokens = 200
             });
 
             if (completionResult.Successful)

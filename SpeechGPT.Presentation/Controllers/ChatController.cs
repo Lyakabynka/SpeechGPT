@@ -7,6 +7,9 @@ using SpeechGPT.Domain.Enums;
 using SpeechGPT.WebApi.ActionResults;
 using SpeechGPT.WebApi.Controllers.Base;
 using System.Security.Claims;
+using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.Extensions.Caching.Memory;
+using StackExchange.Redis;
 
 namespace SpeechGPT.WebApi.Controllers
 {
@@ -16,9 +19,8 @@ namespace SpeechGPT.WebApi.Controllers
         private readonly IChatGPT _chatGPT;
 
         public ChatController(IChatGPT chatGPT) =>
-            _chatGPT = chatGPT;
-
-
+            (_chatGPT) = (chatGPT);
+        
 
         /// <summary>
         /// Creates the chat
@@ -77,7 +79,10 @@ namespace SpeechGPT.WebApi.Controllers
             };
 
             var chatVm = await Mediator.Send(query);
-
+            
+            //Setting the active current user chat in memoryCache
+            //not to get it from database every time
+            
             return new WebApiResult()
             {
                 Data = chatVm,
