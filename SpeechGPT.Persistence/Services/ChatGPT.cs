@@ -6,6 +6,7 @@ using OpenAI.GPT3.ObjectModels;
 using OpenAI.GPT3.ObjectModels.RequestModels;
 using SpeechGPT.Application.Interfaces;
 using SpeechGPT.Application.Options;
+using SpeechGPT.Domain;
 
 namespace SpeechGPT.Persistence.Services
 {

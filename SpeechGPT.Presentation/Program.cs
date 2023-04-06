@@ -7,8 +7,6 @@ using SpeechGPT.WebApi;
 using SpeechGPT.WebApi.Middleware;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
-using StackExchange.Redis;
-using SpeechGPT.Application.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,16 +28,6 @@ builder.Services.AddCors(options =>
         policy.AllowAnyOrigin();
     });
 });
-
-builder.Services.AddStackExchangeRedisCache(config =>
-{
-    var redisSection = builder.Configuration.GetRequiredSection("Redis");
-
-    config.Configuration = redisSection["Configuration"];
-    config.InstanceName = redisSection["InstanceName"];
-});
-
-
 
 builder.Services.AddAutoMapper(config =>
 {

@@ -14,7 +14,7 @@ namespace SpeechGPT.WebApi
 
             services.Configure<ChatGPTOptions>(
                 configuration.GetRequiredSection(ChatGPTOptions.ChatGPTSection));
-
+            
             services.Configure<RedisOptions>(
                 configuration.GetRequiredSection(RedisOptions.RedisSection));
             

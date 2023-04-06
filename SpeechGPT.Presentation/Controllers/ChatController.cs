@@ -21,9 +21,9 @@ namespace SpeechGPT.WebApi.Controllers
     public class ChatController : BaseController
     {
         private readonly IChatGPT _chatGPT;
-        private readonly IDistributedCache _cache;
+        private readonly IRedisCache _cache;
 
-        public ChatController(IChatGPT chatGPT, IDistributedCache cache) =>
+        public ChatController(IChatGPT chatGPT, IRedisCache cache) =>
             (_chatGPT,_cache) = (chatGPT,cache);
         
 
@@ -76,17 +76,30 @@ namespace SpeechGPT.WebApi.Controllers
         public async Task<ActionResult> GetChat(
             [FromRoute] int chatId)
         {
+            //todo if redis is unavailable, just return null.
+            var chatVm = await _cache.GetCacheData<ChatVm>($"chat:{chatId}");
+            //temp ( refactor then )
+            if (chatVm is not null)
+                return new WebApiResult()
+                {
+                    Data = chatVm,
+                    Error = "returned from cache!"
+                };
+            
             var query = new GetChatVmQuery()
             {
                 ChatId = chatId,
                 UserId = UserId
             };
 
-            var chatVm = await Mediator.Send(query);
+            chatVm = await Mediator.Send(query);
+
+            await _cache.SetCacheData($"chat:{chatId}", chatVm);
             
             return new WebApiResult()
             {
                 Data = chatVm,
+                Error = "returned from database!"
             };
         }
 
@@ -146,15 +159,8 @@ namespace SpeechGPT.WebApi.Controllers
 
             await Mediator.Send(commandRequest);
 
-            //todo Receive a response based on previous messages in the chat.
-            var previousMessages = await _cache.GetRecordAsync<List<ChatMessage>>($"chat:{chatId}");
-            if (previousMessages is null)
-            {
-                previousMessages = await Mediator.Send(null); //get previous messages from database
-            }
-
-            //to finish
-            var response = await _chatGPT.GetResponse(request, previousMessages);
+            
+            var response = await _chatGPT.GetResponse(request);
 
             var commandResponse = new CreateMessageCommand()
             {
@@ -166,9 +172,7 @@ namespace SpeechGPT.WebApi.Controllers
 
             await Mediator.Send(commandResponse);
 
-            //to finih
-            previousMessages.Add(ChatMessage.FromAssistant(response));
-            _cache.SetRecordAsync<List<ChatMessage>>($"chat:{chatId}", previousMessages, TimeSpan.FromMinutes(30));
+            //todo
 
             return new WebApiResult()
             {
