@@ -8,7 +8,7 @@ public interface IRedisCache {
     /// <typeparam name="T"></typeparam>
     /// <param name="key"></param>
     /// <returns></returns>
-    Task<T> GetCacheData<T> (string key);
+    Task<T?> GetCacheData<T> (string key);
     
     /// <summary>
     /// Set Data with Value and Expiration Time of Key

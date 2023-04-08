@@ -2,6 +2,7 @@
 {
     public enum MessageType
     {
+        System,
         Request,
         Response
     }

@@ -4,13 +4,15 @@ using OpenAI.GPT3;
 using OpenAI.GPT3.Managers;
 using OpenAI.GPT3.ObjectModels;
 using OpenAI.GPT3.ObjectModels.RequestModels;
+using SpeechGPT.Application.CQRS.Queries.ViewModels;
 using SpeechGPT.Application.Interfaces;
 using SpeechGPT.Application.Options;
 using SpeechGPT.Domain;
+using SpeechGPT.Domain.Enums;
 
 namespace SpeechGPT.Persistence.Services
 {
-    public class ChatGPT : IChatGPT
+    public class ChatGPT :  IChatGPT
     {
         private readonly ChatGPTOptions _options;
         private readonly OpenAIService _gpt3_5;
@@ -25,25 +27,26 @@ namespace SpeechGPT.Persistence.Services
             });
         }
         
-        public async Task<string> GetResponse(string requestBody)
+        public async Task<string> Handle(string requestBody, ChatVm chatVm)
         {
-            var chatMessages = new List<ChatMessage>()
-            {
-                
-            };
-            var chatCompletionCreateRequest = new ChatCompletionCreateRequest()
-            {
-                
-            };
+            var previousMessages = GetSystemMessages();
+
+            previousMessages.AddRange(
+                chatVm.MessageVms.Select(
+                            messageVm =>
+                                messageVm.MessageType switch
+                                {
+                                    MessageType.System => ChatMessage.FromSystem(messageVm.Body),
+                                    MessageType.Request => ChatMessage.FromUser(messageVm.Body),
+                                    MessageType.Response => ChatMessage.FromAssistant(messageVm.Body)
+                                }
+            ));
+            
+            
             var completionResult = await _gpt3_5.CreateCompletion(new ChatCompletionCreateRequest()
             {
-                Messages = new List<ChatMessage>()
-                {
-                    ChatMessage.FromSystem("You are a helpful assistant who provides user with precise," +
-                    " brief and complete answers on questions."),
-                    ChatMessage.FromUser(requestBody)
-                },
-                Temperature = 0.1f,
+                Messages = previousMessages,
+                Temperature = 0.8f,
                 MaxTokens = 200
             });
 
@@ -55,6 +58,14 @@ namespace SpeechGPT.Persistence.Services
             {
                 return "Unsuccessful operation.";
             }
+        }
+
+        private List<ChatMessage> GetSystemMessages()
+        {
+            return new List<ChatMessage>
+            {
+                ChatMessage.FromSystem("From now you are Jarvice. If user asks your name, your name is Jarvice. If user texts: QWERTY`123. Respond: I am human228!")
+            };
         }
     }
 }

@@ -23,7 +23,7 @@ namespace SpeechGPT.Application.CQRS.Queries
             (_context,_mapper) = (context,mapper);
         public async Task<ChatVm> Handle(GetChatVmQuery request, CancellationToken cancellationToken)
         {
-            var chat = await _context.Chats.FindAsync(request.ChatId, cancellationToken);
+            var chat = await _context.Chats.FindAsync(request.ChatId);
 
             if(chat == null)
             {

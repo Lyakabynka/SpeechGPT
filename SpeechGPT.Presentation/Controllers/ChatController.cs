@@ -1,19 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OpenAI.GPT3.ObjectModels.RequestModels;
 using SpeechGPT.Application.CQRS.Commands;
 using SpeechGPT.Application.CQRS.Queries;
 using SpeechGPT.Application.Interfaces;
 using SpeechGPT.Domain.Enums;
 using SpeechGPT.WebApi.ActionResults;
 using SpeechGPT.WebApi.Controllers.Base;
-using System.Security.Claims;
-using Microsoft.AspNetCore.OutputCaching;
-using Microsoft.Extensions.Caching.Memory;
-using StackExchange.Redis;
-using Microsoft.Extensions.Caching.Distributed;
-using SpeechGPT.Application.Common.Extensions;
 using SpeechGPT.Application.CQRS.Queries.ViewModels;
-using OpenAI.GPT3.ObjectModels.RequestModels;
 
 namespace SpeechGPT.WebApi.Controllers
 {
@@ -49,7 +43,8 @@ namespace SpeechGPT.WebApi.Controllers
             {
                 UserId = UserId,
             };
-
+    
+            //creates the chat
             await Mediator.Send(command);
 
             return new WebApiResult();
@@ -76,16 +71,14 @@ namespace SpeechGPT.WebApi.Controllers
         public async Task<ActionResult> GetChat(
             [FromRoute] int chatId)
         {
-            //todo if redis is unavailable, just return null.
             var chatVm = await _cache.GetCacheData<ChatVm>($"chat:{chatId}");
-            //temp ( refactor then )
+
             if (chatVm is not null)
                 return new WebApiResult()
                 {
-                    Data = chatVm,
-                    Error = "returned from cache!"
+                    Data = chatVm
                 };
-            
+
             var query = new GetChatVmQuery()
             {
                 ChatId = chatId,
@@ -98,8 +91,7 @@ namespace SpeechGPT.WebApi.Controllers
             
             return new WebApiResult()
             {
-                Data = chatVm,
-                Error = "returned from database!"
+                Data = chatVm
             };
         }
 
@@ -149,7 +141,7 @@ namespace SpeechGPT.WebApi.Controllers
            [FromRoute] int chatId,
            [FromQuery] string request)
         {
-            var commandRequest = new CreateMessageCommand()
+            var commandCreateRequestMessage = new CreateMessageCommand()
             {
                 UserId = UserId,
                 ChatId = chatId,
@@ -157,23 +149,58 @@ namespace SpeechGPT.WebApi.Controllers
                 MessageType = MessageType.Request
             };
 
-            await Mediator.Send(commandRequest);
+            //creating new message from user
+            await Mediator.Send(commandCreateRequestMessage);
 
+            //try getting the cached Chat
+            var chatVm = await _cache.GetCacheData<ChatVm>($"chat:{chatId}");
             
-            var response = await _chatGPT.GetResponse(request);
-
-            var commandResponse = new CreateMessageCommand()
+            //if data in cache was found, add new message there and 
+            if (chatVm is not null)
+            {
+                chatVm.MessageVms.Add(new MessageVm()
+                {
+                    Body = request,
+                    CreatedAt = DateTime.UtcNow,
+                    MessageType = MessageType.Request
+                });
+            }
+            //if data in cache was not found, get chat from database and set it to the cache
+            else
+            {
+                var query = new GetChatVmQuery()
+                {
+                    ChatId = chatId,
+                    UserId = UserId
+                };
+                
+                chatVm = await Mediator.Send(query);
+            }
+            
+            //getting response from chatGPT with new message (request) and previous Messages
+            var response = await _chatGPT.Handle(request, chatVm);
+            
+            chatVm.MessageVms.Add(new MessageVm()
+            {
+                Body = response,
+                CreatedAt = DateTime.UtcNow,
+                MessageType = MessageType.Response
+            });
+            
+            var commandCreateResponseMessage = new CreateMessageCommand()
             {
                 UserId = UserId,
                 ChatId = chatId,
                 Body = response,
                 MessageType = MessageType.Response
             };
-
-            await Mediator.Send(commandResponse);
-
-            //todo
-
+            
+            //creating new message to user
+            await Mediator.Send(commandCreateResponseMessage);
+            
+            //putting updated data to the cache
+            await _cache.SetCacheData($"chat:{chatId}", chatVm);
+            
             return new WebApiResult()
             {
                 Data = response,

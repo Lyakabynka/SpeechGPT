@@ -1,7 +1,9 @@
-﻿namespace SpeechGPT.Application.Interfaces
+﻿using SpeechGPT.Application.CQRS.Queries.ViewModels;
+
+namespace SpeechGPT.Application.Interfaces
 {
     public interface IChatGPT
     {
-        Task<string> GetResponse(string requestBody);
+        Task<string> Handle(string requestBody, ChatVm chatVm);
     }
 }

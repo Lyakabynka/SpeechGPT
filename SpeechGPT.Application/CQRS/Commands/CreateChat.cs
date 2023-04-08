@@ -21,7 +21,8 @@ namespace SpeechGPT.Application.CQRS.Commands
         {
             var chat = new Chat()
             {
-                UserId = request.UserId
+                UserId = request.UserId,
+                
             };
 
             _context.Entry(chat).State = EntityState.Added;

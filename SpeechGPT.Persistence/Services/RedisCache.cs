@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using SpeechGPT.Application.CQRS.Queries.ViewModels;
 using SpeechGPT.Application.Interfaces;
 using SpeechGPT.Persistence.Services.Helpers;
 using StackExchange.Redis;
@@ -7,7 +8,7 @@ namespace SpeechGPT.Persistence.Services;
 
 public class RedisCache : IRedisCache
 {
-    private IDatabase _db;
+    private IDatabase? _db;
     private readonly RedisConnectionHelper _connectionHelper;
     
     public RedisCache(RedisConnectionHelper connectionHelper)
@@ -18,11 +19,19 @@ public class RedisCache : IRedisCache
     
     private void ConfigureRedis()
     {
-        _db = _connectionHelper.Connection.GetDatabase();
+        _db = _connectionHelper.Connection?.GetDatabase();
     }
 
-    public async Task<T> GetCacheData<T>(string key)
+    private bool IsConnected()
     {
+        return _db is not null && _connectionHelper.Connection.IsConnected;
+    }
+
+    public async Task<T?> GetCacheData<T>(string key)
+    {
+        if (!IsConnected())
+            return default(T);
+
         var value = await _db.StringGetAsync(key);
         if (!string.IsNullOrEmpty(value))
         {
@@ -33,6 +42,9 @@ public class RedisCache : IRedisCache
 
     public async Task<bool> RemoveData(string key)
     {
+        if (!IsConnected())
+            return false;
+        
         bool isKeyExist = await _db.KeyExistsAsync(key);
         if (isKeyExist == true)
             return await _db.KeyDeleteAsync(key);
@@ -42,6 +54,9 @@ public class RedisCache : IRedisCache
 
     public async Task<bool> SetCacheData<T>(string key, T value, DateTime expirationTime = default)
     {
+        if (!IsConnected())
+            return false;
+        
         TimeSpan expires;
         if (expirationTime == default)
             expires = TimeSpan.FromHours(1);
@@ -54,6 +69,9 @@ public class RedisCache : IRedisCache
     
     public async Task<long> ListAppend<T>(string key, T value, DateTime expirationTime = default)
     {
+        if (!IsConnected() || !(await _db.KeyExistsAsync(key)))
+            return 0;
+        
         if (expirationTime == default)
             expirationTime = DateTime.Now.AddHours(1);
         
@@ -64,12 +82,15 @@ public class RedisCache : IRedisCache
 
     public async Task<List<T>?> GetList<T>(string key)
     {
+        if (!IsConnected())
+            return null;
+        
         var elements = await _db.ListRangeAsync(key,0,-1);
         if (elements.Length == 0)
             return null;
 
         return elements.Select(element => 
-                JsonSerializer.Deserialize<T>(element))
+                JsonSerializer.Deserialize<T>(element)!)
             .ToList();
     }
 }

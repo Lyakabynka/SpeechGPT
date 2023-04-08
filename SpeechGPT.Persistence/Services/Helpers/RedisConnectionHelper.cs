@@ -15,8 +15,18 @@ public class RedisConnectionHelper
     public RedisConnectionHelper(IOptions<RedisOptions> options)
     {
         _options = options.Value;
-        
-        lazyConnection = new Lazy<ConnectionMultiplexer>(() => 
-            ConnectionMultiplexer.Connect(_options.Url));
+
+        lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+        {
+            try
+            {
+                return ConnectionMultiplexer.Connect(_options.Url);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unable to connect to Redis server: {ex.Message}");
+                return null;
+            }
+        });
     }
 }
