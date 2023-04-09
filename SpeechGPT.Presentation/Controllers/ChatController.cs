@@ -8,6 +8,7 @@ using SpeechGPT.Domain.Enums;
 using SpeechGPT.WebApi.ActionResults;
 using SpeechGPT.WebApi.Controllers.Base;
 using SpeechGPT.Application.CQRS.Queries.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace SpeechGPT.WebApi.Controllers
 {

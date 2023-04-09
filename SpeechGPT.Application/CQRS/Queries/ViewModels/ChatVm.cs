@@ -19,8 +19,9 @@ namespace SpeechGPT.Application.CQRS.Queries.ViewModels
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Chat, ChatVm>()
-                .ForMember(chatVm => chatVm.MessageVms, option=>
-                    option.MapFrom(chat=>chat.Messages));
+                .ForMember(chatVm => chatVm.MessageVms, option =>
+                    //.MapFrom(chat => chat.Messages != null ? chat.Messages.OrderBy(m => m.CreatedAt) : null));
+                    option.MapFrom(chat => chat.Messages.OrderBy(m => m.CreatedAt)));
         }
     }
 }
